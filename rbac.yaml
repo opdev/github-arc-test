@@ -110,6 +110,7 @@ subjects:
   - kind: ServiceAccount
     name: arc-gha-rs-controller
     namespace: arc-systems
+  # The mounted ephemeral work directory is not accessible without letting gha-rs-kube-mode use anyuid
   - kind: ServiceAccount
     name: gha-rs-kube-mode
     namespace: arc-runners
