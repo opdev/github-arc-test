@@ -1,10 +1,20 @@
 # https://docs.github.com/en/actions/writing-workflows/choosing-where-your-workflow-runs/running-jobs-in-a-container
 name: Container workflow
 run-name: Container workflow
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      runs-on:
+        type: choice
+        description: Choose a runner set on which to run this workflow.
+        options:
+          - runner-set
+          - runner-set-k8s
+          - runner-set-dind-rootful
+          - runner-set-dind-rootless
 jobs:
-  simple-job:
-    runs-on: runner-set
+  container-job:
+    runs-on: ${{ github.event.inputs.runs-on }}
     container:
       image: registry.access.redhat.com/ubi10/ubi:latest
       env:

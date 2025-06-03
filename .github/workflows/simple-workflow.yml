@@ -1,9 +1,19 @@
 name: Simple workflow
 run-name: Simple workflow
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      runs-on:
+        type: choice
+        description: Choose a runner set on which to run this workflow.
+        options:
+          - runner-set
+          - runner-set-k8s
+          - runner-set-dind-rootful
+          - runner-set-dind-rootless
 jobs:
   simple-job:
-    runs-on: runner-set
+    runs-on: ${{ github.event.inputs.runs-on }}
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted outside of GitHub!"
