@@ -1,0 +1,50 @@
+apiVersion: actions.github.com/v1alpha1
+kind: AutoscalingRunnerSet
+metadata:
+  name: runner-set-k8s
+  namespace: arc-runners
+  labels:
+    app.kubernetes.io/version: "0.11.0"
+spec:
+  githubConfigUrl: https://github.com/opdev/github-arc-test
+  githubConfigSecret: runner-credentials
+  template:
+    spec:
+      containers:
+      - command: 
+          - /home/runner/run.sh
+        image: ghcr.io/actions/actions-runner:latest
+        name: runner
+        env:
+          - name: ACTIONS_RUNNER_CONTAINER_HOOKS
+            value: /home/runner/k8s/index.js
+          - name: ACTIONS_RUNNER_POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
+            value: "true"
+        volumeMounts:
+          - name: work
+            mountPath: /home/runner/_work
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+          runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 123
+      restartPolicy: Never
+      serviceAccountName: gha-rs-kube-mode
+      volumes:
+      - name: work
+        ephemeral:
+          volumeClaimTemplate:
+            spec:
+              accessModes:
+              - ReadWriteOnce
+              storageClassName: gp3-csi
+              resources:
+                requests:
+                  storage: 1Gi

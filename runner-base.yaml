@@ -1,0 +1,26 @@
+apiVersion: actions.github.com/v1alpha1
+kind: AutoscalingRunnerSet
+metadata:
+  name: runner-set
+  namespace: arc-runners
+  labels:
+    app.kubernetes.io/version: 0.11.0
+spec:
+  githubConfigSecret: runner-credentials
+  githubConfigUrl: https://github.com/opdev/github-arc-test
+  template:
+    spec:
+      containers:
+      - command:
+          - /home/runner/run.sh
+        image: ghcr.io/actions/actions-runner:latest
+        name: runner
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+          runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 123
+      restartPolicy: Never
