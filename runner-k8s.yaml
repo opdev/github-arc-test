@@ -36,6 +36,8 @@ spec:
           runAsUser: 1001
           runAsGroup: 123
       restartPolicy: Never
+      securityContext:
+        fsGroup: 1001 # https://github.com/actions/runner/issues/981#issuecomment-1777916099
       serviceAccountName: gha-rs-kube-mode
       volumes:
       - name: work
