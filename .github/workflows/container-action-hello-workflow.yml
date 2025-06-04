@@ -1,0 +1,28 @@
+name: Container action hello workflow
+run-name: Container action hello workflow
+on:
+  workflow_dispatch:
+    inputs:
+      runs-on:
+        type: choice
+        description: Choose a runner set on which to run this workflow.
+        options:
+          - runner-set
+          - runner-set-k8s
+          - runner-set-dind-rootful
+          - runner-set-dind-rootless
+      who-to-greet:
+        description: Who to greet in the log
+        required: true
+        default: 'World'
+        type: string
+
+jobs:
+  container-action-hello-job:
+    runs-on: ${{ github.event.inputs.runs-on }}
+    steps:
+      - name: Print to Log
+        id: print-to-log
+        uses: actions/hello-world-docker-action@0b406c0e14ed4b1853113f84b89aa6cdf762e340 # v2
+        with:
+          who-to-greet: ${{ inputs.who-to-greet }}
