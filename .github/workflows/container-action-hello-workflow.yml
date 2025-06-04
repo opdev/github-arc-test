@@ -14,11 +14,6 @@ on:
       wait:
         description: Wait after attempting to execute container action?
         type: boolean
-      who-to-greet:
-        description: Who to greet in the log
-        required: true
-        default: 'World'
-        type: string
 
 jobs:
   container-action-hello-job:
@@ -28,12 +23,11 @@ jobs:
       env:
         MY_VAR: foo
     steps:
-      - name: Print to Log
-        id: print-to-log
-        uses: actions/hello-world-docker-action@0b406c0e14ed4b1853113f84b89aa6cdf762e340 # v2
-        with:
-          who-to-greet: ${{ inputs.who-to-greet }}
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Run container action
+        uses: ./hello-world-container-action
       - name: Wait for 600 seconds
-        if: ${{ github.event.inputs.wait }}
+        if: ${{ github.event.inputs.wait == 'true' }}
         run: |
           sleep 600

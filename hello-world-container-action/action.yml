@@ -1,0 +1,17 @@
+name: 'Hello World'
+description: 'Run a hello-world container image'
+runs:
+  using: 'docker'
+  image: 'registry.access.redhat.com/ubi10/ubi:latest'
+  entrypoint: '/bin/sh'
+  args:
+    - '-c'
+    - |
+      echo "Hello, World!"
+      echo "This container is running as user $(whoami), with UID $(id -u) and GID $(id -g)."
+      . /etc/os-release
+      echo "The container identifies its distribution as ${PRETTY_NAME}."
+      echo "Trying to create a file in / ..."
+      touch /a-file
+      echo "Trying to create a file in /tmp ..."
+      touch /tmp/a-file
