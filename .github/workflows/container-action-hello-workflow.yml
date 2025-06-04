@@ -20,6 +20,10 @@ on:
 jobs:
   container-action-hello-job:
     runs-on: ${{ github.event.inputs.runs-on }}
+    container:
+      image: registry.access.redhat.com/ubi10/ubi:latest
+      env:
+        MY_VAR: foo
     steps:
       - name: Print to Log
         id: print-to-log
