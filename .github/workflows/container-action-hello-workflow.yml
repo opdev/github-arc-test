@@ -11,6 +11,9 @@ on:
           - runner-set-k8s
           - runner-set-dind-rootful
           - runner-set-dind-rootless
+      wait:
+        description: Wait after attempting to execute container action?
+        type: boolean
       who-to-greet:
         description: Who to greet in the log
         required: true
@@ -30,3 +33,7 @@ jobs:
         uses: actions/hello-world-docker-action@0b406c0e14ed4b1853113f84b89aa6cdf762e340 # v2
         with:
           who-to-greet: ${{ inputs.who-to-greet }}
+      - name: Wait for 600 seconds
+        if: ${{ github.event.inputs.wait }}
+        run: |
+          sleep 600
