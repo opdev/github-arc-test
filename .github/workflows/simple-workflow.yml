@@ -11,6 +11,10 @@ on:
           - runner-set-k8s
           - runner-set-dind-rootful
           - runner-set-dind-rootless
+          - runner-set-nogid
+          - runner-set-k8s-nogid
+          - runner-set-dind-rootful-nogid
+          - runner-set-dind-rootless-nogid
 jobs:
   simple-job:
     runs-on: ${{ github.event.inputs.runs-on }}
